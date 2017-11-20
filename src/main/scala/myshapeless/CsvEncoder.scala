@@ -37,6 +37,9 @@ object CsvEncoder {
 
 object Main extends App {
 
+  def writeCsv[A](values: List[A])(implicit enc: CsvEncoder[A]): String =
+    values.map(value => enc.encode(value).mkString(",")).mkString("\n")
+
   def encodeCsv[A](value: A)(implicit enc: CsvEncoder[A]): List[String] =
     enc.encode(value)
 
@@ -53,4 +56,12 @@ object Main extends App {
   println(encodeCsv(employee))
   println(encodeCsv[Employee](employee))
   println(encodeCsv(iceCream))
+
+  val employees: List[Employee] = List(
+    Employee("Bill", 1, manager = true),
+    Employee("Peter", 2, manager = false),
+    Employee("Milton", 3, manager = false)
+  )
+
+  println(writeCsv(employees))
 }
